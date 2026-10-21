@@ -72,7 +72,7 @@ section{padding:56px 0;border-top:1px solid var(--line)}
 .card .kind{font-size:12px;color:var(--muted);text-transform:uppercase;letter-spacing:.05em}
 .status{font-size:11px;padding:3px 8px;border-radius:999px;font-weight:500}
 .status.shipped{background:var(--ok-soft);color:var(--ok)}
-.status.wip{background:var(--wip-soft);color:var(--wip)}
+.status.wip,.status.built{background:var(--wip-soft);color:var(--wip)}
 .card h3{font-size:18px;letter-spacing:-.01em;margin-bottom:8px}
 .card p{color:var(--muted);font-size:15px;flex:1}
 .card .outcome{margin-top:12px;font-size:14px;padding:10px 12px;border-left:3px solid var(--accent);background:var(--accent-soft);border-radius:0 6px 6px 0}
@@ -258,44 +258,44 @@ footer .wrap{display:flex;justify-content:space-between;flex-wrap:wrap;gap:12px}
 const GH = "https://github.com/sbsmith340";
 const projects = [
   {
-    show: true, status: "wip", kind: "Detection & response",
+    show: true, status: "built", kind: "Detection & response",
     title: "Sentinel phishing-triage playbook",
-    summary: "Logic App playbook that enriches reported-phish incidents (sender, URLs, attachments), scores them, and auto-closes or escalates — deployable as an ARM template.",
+    summary: "Logic App playbook that scores user-reported phishing on 15 explainable signals, comments the verdict on the incident, and escalates, flags for review, or closes. Deployable as an ARM template.",
     outcome: "On 200 synthetic reports: 62% of the queue cleared as benign, 0 benign emails escalated.",
     repo: GH + "/sentinel-phishing-triage", writeup: ""
   },
   {
-    show: false, status: "wip", kind: "Detection engineering",
-    title: "KQL hunting & detection library",
-    summary: "Sentinel and Defender queries mapped to MITRE ATT&CK, each with rationale, tuning notes, and a test case from a lab tenant.",
-    outcome: "",
+    show: true, status: "built", kind: "Detection engineering",
+    title: "KQL detection library",
+    summary: "13 Sentinel / Defender XDR detections as code across identity, endpoint, email, and cloud. Each is ATT&CK-mapped with tuning notes and a lab test; a validator blocks broken rules and builds a Sentinel ARM template.",
+    outcome: "Covers password spray, MFA fatigue, LSASS dumping, OAuth consent abuse, and more.",
     repo: GH + "/kql-detection-library", writeup: ""
   },
   {
-    show: false, status: "wip", kind: "Vulnerability management",
+    show: true, status: "shipped", kind: "Vulnerability management",
     title: "Remediation SLA metrics",
-    summary: "Python pipeline that turns Defender vulnerability exports into mean-time-to-remediate and SLA-compliance metrics for critical and high findings, with a leadership dashboard.",
-    outcome: "",
-    repo: GH + "/vuln-remediation-metrics", writeup: ""
+    summary: "Diffs Defender vulnerability snapshots to measure what the product can't report directly: time to remediate, SLA compliance by severity, and the aging backlog, delivered as a one-page dashboard.",
+    outcome: "Demo surfaces Critical+High SLA compliance sliding from 100% to 76% while MTTR still looks healthy.",
+    repo: GH + "/vuln-remediation-metrics", writeup: "demos/remediation-dashboard.html", writeupLabel: "Live demo"
   },
   {
-    show: false, status: "wip", kind: "Automation",
-    title: "Signed PowerShell security toolkit",
-    summary: "Code-signed scripts for server OS inventory, deprovisioning-time audits, and identity attribute hygiene — plus a rollout guide for enforcing the AllSigned execution policy.",
-    outcome: "",
+    show: true, status: "built", kind: "Automation",
+    title: "PowerShell security toolkit",
+    summary: "Pester-tested module for server OS lifecycle inventory, a deprovisioning audit against a 24-hour SLA, and identity hygiene reporting, plus a phased rollout plan for enforcing the AllSigned execution policy.",
+    outcome: "Deprovisioning audit exposes weekend SLA breaches and a never-disabled account that the 16-hour average hides.",
     repo: GH + "/powershell-security-toolkit", writeup: ""
   },
   {
-    show: false, status: "wip", kind: "GRC engineering",
-    title: "Security program starter kit",
-    summary: "CIA-based data classification, risk register, asset-inventory workbook with collection queries, and incident-response plan templates mapped to NIST CSF.",
-    outcome: "",
+    show: true, status: "shipped", kind: "GRC engineering",
+    title: "GRC starter kit",
+    summary: "CIA-based data classification standard, scored risk register with a validator and heat maps, asset inventory workbook with collection queries, an incident response plan, and a NIST CSF 2.0 map.",
+    outcome: "10 example risks, all within appetite once controls are verified; the validator rejects inconsistent scores.",
     repo: GH + "/grc-starter-kit", writeup: ""
   },
   {
-    show: false, status: "wip", kind: "Home lab",
+    show: false, status: "built", kind: "Home lab",
     title: "Proxmox security lab",
-    summary: "Segmented lab with Active Directory, OPNsense, and log forwarding into Sentinel — used to generate and test every detection in this portfolio.",
+    summary: "Segmented lab with Active Directory, OPNsense, and log forwarding into Sentinel, used to generate and test every detection in this portfolio.",
     outcome: "",
     repo: GH + "/security-home-lab", writeup: ""
   }
@@ -310,14 +310,14 @@ if (!visible.length) {
     <article class="card">
       <div class="top">
         <span class="kind mono">${p.kind}</span>
-        <span class="status ${p.status}">${p.status === "shipped" ? "Shipped" : "In progress"}</span>
+        <span class="status ${p.status}">${{shipped: "Shipped", built: "Lab test pending", wip: "In progress"}[p.status]}</span>
       </div>
       <h3>${p.title}</h3>
       <p>${p.summary}</p>
       ${p.outcome ? `<div class="outcome">${p.outcome}</div>` : ""}
       <div class="links">
         ${p.repo ? `<a href="${p.repo}" target="_blank" rel="noopener">Code →</a>` : ""}
-        ${p.writeup ? `<a href="${p.writeup}" target="_blank" rel="noopener">Write-up →</a>` : ""}
+        ${p.writeup ? `<a href="${p.writeup}" target="_blank" rel="noopener">${p.writeupLabel || "Write-up"} →</a>` : ""}
       </div>
     </article>`).join("");
 }
