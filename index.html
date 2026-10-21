@@ -133,7 +133,7 @@ footer .wrap{display:flex;justify-content:space-between;flex-wrap:wrap;gap:12px}
       <a class="btn" href="https://github.com/sbsmith340" target="_blank" rel="noopener">GitHub</a>
     </div>
     <div class="meta mono">
-      <span>📍 Atlanta, GA · Remote (US)</span>
+      <span>Atlanta, GA · Remote (US)</span>
       <span>M.S. Cybersecurity</span>
       <span>Secret-clearance eligible</span>
     </div>
@@ -291,6 +291,20 @@ const projects = [
     summary: "CIA-based data classification standard, scored risk register with a validator and heat maps, asset inventory workbook with collection queries, an incident response plan, and a NIST CSF 2.0 map.",
     outcome: "10 example risks, all within appetite once controls are verified; the validator rejects inconsistent scores.",
     repo: GH + "/grc-starter-kit", writeup: ""
+  },
+  {
+    show: true, status: "shipped", kind: "Federal compliance",
+    title: "OSCAL ATO package",
+    summary: "System Security Plan and POA&M for a fictional Moderate-impact Azure system, written as compliance as code: YAML builds into NIST OSCAL 1.1.2 JSON, validated against the official schemas and the real 800-53 Rev 5 baseline.",
+    outcome: "Build fails if a partial control has no POA&M item, or a POA&M item points at an implemented control.",
+    repo: GH + "/oscal-ato-package", writeup: ""
+  },
+  {
+    show: true, status: "shipped", kind: "Incident response",
+    title: "BEC incident case study",
+    summary: "End-to-end investigation of an adversary-in-the-middle phishing attack that bypassed MFA and led to attempted invoice fraud: nine analyst pivots with matching KQL, a full incident report, and a reproducible dataset.",
+    outcome: "Report is tested against the data; it also shows which detections would have fired late or not at all.",
+    repo: GH + "/incident-case-study-bec", writeup: GH + "/incident-case-study-bec/blob/main/REPORT.md", writeupLabel: "Report"
   },
   {
     show: false, status: "built", kind: "Home lab",
